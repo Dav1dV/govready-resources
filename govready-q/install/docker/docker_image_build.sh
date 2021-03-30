@@ -6,6 +6,16 @@ WARNINGS=0
 
 # TODO: Take an argument to build with Gunicorn instead of the default uWSGI.
 
+# Run from the GovReady-Q repository's root directory
+#   e.g.,
+#if [ ! -d govready-q ]; then
+#	git clone git@github.com:GovReady/govready-q.git
+#	cp Dockerfile \
+#	   ../bash/quickstart.sh \
+#	   govready-q
+#fi
+#cd govready-q
+
 if [ ! -f Dockerfile ]; then
 	echo "This should be run from the root of the GovReady-Q repository."
 	exit 1
@@ -18,8 +28,8 @@ if ! git diff-index --quiet HEAD --; then
 	WARNINGS=1
 
 # Check that the HEAD commit is pushed.
-elif ! git branch -r --contains | grep "^\s*origin/master$" > /dev/null; then
-	echo "WARNING: Your branch is ahead of origin/master. Push first."
+elif ! git branch -r --contains | grep "^\s*origin/main$" > /dev/null; then
+	echo "WARNING: Your branch is ahead of origin/main. Push first."
 	echo
 	WARNINGS=1
 fi

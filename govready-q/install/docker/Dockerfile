@@ -100,12 +100,15 @@ RUN sqlite3 --version
 # that often has local development files. But *do* include fixtures
 # so that tests can be run.
 COPY VERSION ./VERSION
+COPY assets  ./assets
 COPY controls ./controls
 COPY discussion ./discussion
 COPY guidedmodules ./guidedmodules
 COPY modules ./modules
+COPY schemas ./schemas
 COPY siteapp ./siteapp
 COPY templates ./templates
+COPY tools     ./tools
 COPY fixtures ./fixtures
 COPY q-files ./q-files
 COPY loadtesting ./loadtesting
@@ -160,8 +163,8 @@ RUN groupadd application && \
 RUN echo -n "the non-root user is: " && grep ^application /etc/passwd
 
 # Give the non-root user access to scratch space.
-RUN mkdir -p local
-RUN chown -R application:application local
+RUN mkdir -p                         local profiles \
+ && chown -R application:application local profiles
 
 # Move the environment.json to /tmp because in some environments the main
 # filesystem is read-only and we won't be able to update local/environment.json
