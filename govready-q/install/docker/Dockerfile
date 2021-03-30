@@ -39,15 +39,22 @@ ENV LANGUAGE en_US:en
 # Install required system packages.
 # git222: git 2 or later is required for our use of GIT_SSH_COMMAND in AppSourceConnection
 # jq: we use it to assemble the local/environment.json file
+ARG pandoc_url=https://github.com/jgm/pandoc/releases/download/2.13/pandoc-2.13-linux-amd64.tar.gz
 RUN \
    yum -y install https://repo.ius.io/ius-release-el7.rpm \
 && yum -y update \
 && yum -y install \
     python36u python36u-pip \
     unzip git222 jq nmap-ncat \
-    graphviz pandoc \
+    graphviz \
     supervisor \
-    && yum clean all && rm -rf /var/cache/yum
+ && yum clean all  &&  rm -rf /var/cache/yum  \
+ && cd /tmp  \
+ && pandoc_filename=$(curl -L  -O  -s -w '%{filename_effective}'  "$pandoc_url")  \
+ && mkdir pandoc  \
+ && tar xvzf "$pandoc_filename" --strip-components 1  -C pandoc  \
+ && mv pandoc/bin/* /usr/local/bin  \
+ && rm -rf pandoc "$pandoc_filename"
 
 # Upgrade pip to version 20.1+ - IMPORTANT
 RUN python3.6 -m pip install --upgrade pip
